@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRAC YCDSB</title>
+  <meta name="description" content="TRAC YCDSB advocates for the return of academic U.S. school-affiliated trips for the 2026–2027 school year." />
+  <style>
+    :root{
+      --bg:#07111f;--surface:rgba(17,31,56,.78);--line:rgba(223,230,240,.14);--text:#edf3fb;--muted:#a9b6ca;--silver:#d8e0eb;--silver-2:#94a4ba;--gold:#e0b24b;--gold-2:#f2d38a;--shadow:0 24px 70px rgba(0,0,0,.32);
+      --font-display:'Impact','Arial Black',sans-serif;--font-title:'Georgia','Times New Roman',serif;--font-body:'Avenir Next','Avenir','Segoe UI',sans-serif;
+      --text-xs:clamp(.75rem,.72rem + .2vw,.875rem);--text-sm:clamp(.92rem,.84rem + .3vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.2rem,1rem + .8vw,1.6rem);--text-hero:clamp(3rem,1rem + 7vw,7.4rem);
+    }
+    *{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} body{font-family:var(--font-body);background:linear-gradient(180deg,#08111f 0%, #07111f 35%, #050a13 100%);color:var(--text);line-height:1.55;overflow-x:hidden} a{text-decoration:none;color:inherit} img{display:block;max-width:100%;height:auto}
+    .container{width:min(1180px, calc(100% - 2rem));margin-inline:auto}.skip{position:absolute;left:-9999px}.skip:focus{left:1rem;top:1rem;z-index:999;background:#fff;color:#000;padding:.7rem 1rem;border-radius:999px}
+    canvas#particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.9}.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1}.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at center, black 40%, transparent 90%)}
+    .sky-glow{position:absolute;inset:0;background:radial-gradient(circle at 12% 22%, rgba(224,178,75,.14), transparent 20%),radial-gradient(circle at 88% 10%, rgba(133,155,194,.18), transparent 24%),radial-gradient(circle at 70% 72%, rgba(224,178,75,.08), transparent 20%),radial-gradient(circle at 24% 82%, rgba(145,167,201,.1), transparent 22%);filter:blur(8px)}
+    .cloud{position:absolute;background:rgba(228,236,249,.09);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 40px rgba(173,191,219,.08)} .cloud,.cloud:before,.cloud:after{border-radius:999px}.cloud:before,.cloud:after{content:'';position:absolute;background:inherit;border:inherit;border-radius:inherit}
+    .cloud--1{width:220px;height:62px;top:14%;left:-260px;animation:cloudMove 42s linear infinite}.cloud--1:before{width:100px;height:100px;left:28px;top:-42px}.cloud--1:after{width:120px;height:90px;left:100px;top:-30px}
+    .cloud--2{width:180px;height:54px;top:35%;left:-240px;animation:cloudMove 54s linear infinite 6s}.cloud--2:before{width:92px;height:92px;left:16px;top:-35px}.cloud--2:after{width:94px;height:78px;left:86px;top:-26px}
+    .cloud--3{width:260px;height:70px;top:68%;left:-300px;animation:cloudMove 60s linear infinite 12s}.cloud--3:before{width:110px;height:110px;left:35px;top:-46px}.cloud--3:after{width:130px;height:94px;left:118px;top:-34px}
+    @keyframes cloudMove{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 420px))}}
+    .plane{position:absolute;opacity:.18;color:var(--gold)} .plane svg{display:block;width:100%;height:100%}.plane--1{width:80px;top:20%;left:-100px;animation:planeFly 28s linear infinite}.plane--2{width:64px;top:58%;left:-80px;animation:planeFly 35s linear infinite 11s}
+    @keyframes planeFly{0%{transform:translateX(0) translateY(0) rotate(7deg)}50%{transform:translateX(55vw) translateY(-20px) rotate(5deg)}100%{transform:translateX(calc(100vw + 160px)) translateY(10px) rotate(7deg)}}
+    .site-shell{position:relative;z-index:3}
+    header{position:sticky;top:0;z-index:40;background:rgba(8,16,30,.64);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)} .nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0}
+    .brand{display:flex;align-items:center;gap:.9rem}.brand-logo{width:50px;height:50px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 22px rgba(209,218,232,.16);flex-shrink:0}.brand-logo img{width:100%;height:100%;object-fit:cover}.brand-copy strong{display:block;letter-spacing:.18em;text-transform:uppercase;font-size:var(--text-sm)}.brand-copy span{display:block;color:var(--muted);font-size:var(--text-xs)}
+    .nav-tabs{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}.tab-link{padding:.68rem .95rem;border-radius:999px;border:1px solid transparent;font-size:var(--text-sm);color:var(--muted);transition:.25s ease}.tab-link:hover,.tab-link.active{background:rgba(255,255,255,.05);border-color:var(--line);color:var(--gold)}
+    .cta{display:inline-flex;align-items:center;justify-content:center;padding:.95rem 1.25rem;border-radius:999px;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#09111f;font-weight:800;box-shadow:0 14px 35px rgba(224,178,75,.28)} .ghost{display:inline-flex;align-items:center;justify-content:center;padding:.95rem 1.25rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--text)}
+    .page{display:none;min-height:100vh}.page.active{display:block}.hero{padding:clamp(3rem,7vw,6rem) 0 2.5rem;position:relative;overflow:hidden}.eyebrow{display:inline-flex;gap:.65rem;align-items:center;padding:.5rem .85rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--silver);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.18em}.eyebrow-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(224,178,75,.7)}
+    .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:1.5rem;align-items:center;margin-top:1.2rem}.script{font-family:var(--font-title);font-size:clamp(2rem,1.6rem + 2vw,3.3rem);color:var(--gold);line-height:.95;font-style:italic}.headline{font-family:var(--font-display);font-size:var(--text-hero);line-height:.86;letter-spacing:.04em;text-transform:uppercase;max-width:11ch;text-wrap:balance;margin-top:.2rem;text-shadow:0 6px 0 rgba(0,0,0,.18), 0 18px 30px rgba(0,0,0,.48), 0 0 18px rgba(224,178,75,.12)} .hero-sub{font-size:var(--text-lg);color:var(--silver);max-width:55ch;margin-top:1.15rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.7rem}.home-quick{display:grid;grid-template-columns:1fr .95fr;gap:1rem;margin-top:1.3rem}.hero-card,.quick-card,.panel{position:relative;padding:1rem;border-radius:30px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));box-shadow:var(--shadow);overflow:hidden}.hero-card img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:22px}.hero-card-badge{position:absolute;left:1.5rem;bottom:1.5rem;max-width:70%;padding:.85rem 1rem;background:rgba(7,17,31,.72);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:18px}.hero-card-badge strong{display:block;font-size:var(--text-sm);text-transform:uppercase;letter-spacing:.14em}.hero-card-badge span{display:block;color:var(--muted);font-size:var(--text-xs);margin-top:.2rem}
+    .quick-card h3,.title{font-family:var(--font-title);color:var(--silver)} .quick-card h3{font-size:2rem}.quick-card p,.panel p{color:var(--muted)} .quick-links{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1rem}.link-pill{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1rem;border-radius:999px;border:1px solid var(--line);color:var(--silver);font-size:var(--text-sm);word-break:break-all}.qr-inline{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}.qr-inline img{width:120px;height:120px;border-radius:16px;background:#fff;padding:.35rem}
+    .ticker-wrap{overflow:hidden;padding-top:1.2rem}.ticker{display:flex;gap:1rem;min-width:max-content;animation:slide 24s linear infinite}@keyframes slide{to{transform:translateX(-50%)}}.ticker span{padding:.8rem 1rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:var(--text-sm);color:var(--silver)}
+    .section{padding:clamp(3.5rem,7vw,5.5rem) 0}.section-head{display:grid;grid-template-columns:.85fr 1.15fr;gap:2rem;align-items:end;margin-bottom:1.75rem}.kicker{color:var(--silver-2);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;margin-bottom:.7rem}.title{font-size:clamp(2.3rem,1.5rem + 2.8vw,4.2rem);line-height:.92}.lede{font-size:var(--text-lg);color:var(--muted);max-width:58ch}
+    .point-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.point{padding:1.25rem;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.03)}.point h3{font-family:var(--font-display);font-size:var(--text-lg);letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}.point p{margin-top:.75rem;color:var(--muted)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.contact-grid a,.contact-grid div{padding:1rem 1.1rem;border-radius:22px;border:1px solid var(--line);background:rgba(255,255,255,.03)} .contact-grid small{display:block;color:var(--silver-2);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem}
+    .embed-frame{width:100%;min-height:560px;border:1px solid var(--line);border-radius:22px;background:#fff}.instagram-note{margin-top:1rem;color:var(--muted);font-size:var(--text-sm)} .footer{padding:2rem 0 3rem;color:var(--muted)}.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease, transform .8s ease}.reveal.is-visible{opacity:1;transform:none}
+
+    /* ── COMPETITION GALLERY ── */
+    .comp-section{padding:clamp(3.5rem,7vw,5.5rem) 0}
+    .comp-filter{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}
+    .filter-btn{padding:.55rem 1.1rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-size:var(--text-xs);cursor:pointer;transition:.22s ease;text-transform:uppercase;letter-spacing:.12em}
+    .filter-btn:hover,.filter-btn.active{background:linear-gradient(135deg,rgba(224,178,75,.18),rgba(224,178,75,.06));border-color:var(--gold);color:var(--gold-2)}
+    .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .comp-card{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:rgba(17,31,56,.6);cursor:pointer;transition:transform .3s ease,box-shadow .3s ease}
+    .comp-card:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(224,178,75,.25)}
+    .comp-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .4s ease}
+    .comp-card:hover img{transform:scale(1.06)}
+    .comp-card-info{position:absolute;bottom:0;left:0;right:0;padding:1.2rem 1rem .9rem;background:linear-gradient(to top, rgba(5,10,19,.95) 60%, transparent);transform:translateY(4px);transition:transform .3s ease}
+    .comp-card:hover .comp-card-info{transform:translateY(0)}
+    .comp-card-org{display:inline-block;padding:.28rem .65rem;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.4rem}
+    .org-deca{background:rgba(0,90,205,.3);color:#7eb8ff;border:1px solid rgba(0,90,205,.4)}
+    .org-hosa{background:rgba(80,180,120,.18);color:#7fd4a8;border:1px solid rgba(80,180,120,.3)}
+    .comp-card-title{font-family:var(--font-display);font-size:var(--text-sm);letter-spacing:.08em;text-transform:uppercase;color:var(--silver)}
+    .comp-card-place{font-size:var(--text-xs);color:var(--gold);margin-top:.25rem}
+    .comp-card-year{font-size:var(--text-xs);color:var(--muted)}
+    /* hidden class */
+    .comp-card.hidden{display:none}
+
+    /* ── LIGHTBOX ── */
+    .lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(4,8,18,.92);backdrop-filter:blur(18px);align-items:center;justify-content:center;padding:1rem}
+    .lightbox.open{display:flex}
+    .lb-inner{position:relative;max-width:900px;width:100%;max-height:92vh;display:flex;flex-direction:column;gap:.8rem}
+    .lb-img-wrap{position:relative;border-radius:22px;overflow:hidden;background:#0a1525;flex:1;display:flex;align-items:center;justify-content:center}
+    .lb-img-wrap img{max-height:72vh;width:auto;max-width:100%;border-radius:22px;object-fit:contain;display:block;margin:auto}
+    .lb-caption{text-align:center;padding:.6rem 1rem;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+    .lb-caption strong{display:block;color:var(--silver);font-family:var(--font-display);letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-sm)}
+    .lb-caption span{color:var(--muted);font-size:var(--text-xs)}
+    .lb-close{position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;background:rgba(224,178,75,.15);border:1px solid var(--gold);color:var(--gold);font-size:1.3rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s ease;z-index:10}
+    .lb-close:hover{background:var(--gold);color:#09111f}
+    .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(224,178,75,.12);border:1px solid rgba(224,178,75,.35);color:var(--gold);font-size:1.4rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s ease;z-index:10}
+    .lb-nav:hover{background:var(--gold);color:#09111f}
+    .lb-prev{left:-22px}.lb-next{right:-22px}
+    .lb-counter{position:absolute;bottom:12px;right:16px;font-size:.72rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .lb-thumb-strip{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem .1rem;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+    .lb-thumb-strip::-webkit-scrollbar{height:4px}.lb-thumb-strip::-webkit-scrollbar-thumb{background:var(--gold);border-radius:999px}
+    .lb-thumb{width:60px;height:60px;border-radius:10px;object-fit:cover;cursor:pointer;border:2px solid transparent;transition:.2s ease;flex-shrink:0;opacity:.6}
+    .lb-thumb.active,.lb-thumb:hover{border-color:var(--gold);opacity:1}
+
+    /* ── FEATURED BANNER (carousel on why page) ── */
+    .carousel-wrap{position:relative;overflow:hidden;border-radius:28px;border:1px solid var(--line);margin-top:1rem}
+    .carousel-track{display:flex;transition:transform .5s cubic-bezier(.25,.46,.45,.94)}
+    .carousel-slide{flex-shrink:0;width:100%;position:relative}
+    .carousel-slide img{width:100%;aspect-ratio:16/7;object-fit:cover;display:block}
+    .carousel-slide-caption{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.8rem 1.2rem;background:linear-gradient(to top,rgba(5,10,19,.9) 55%,transparent)}
+    .carousel-slide-caption strong{font-family:var(--font-display);font-size:var(--text-lg);letter-spacing:.1em;text-transform:uppercase;display:block;color:var(--silver)}
+    .carousel-slide-caption span{color:var(--muted);font-size:var(--text-xs);margin-top:.3rem;display:block}
+    .carousel-dots{display:flex;justify-content:center;gap:.5rem;padding:.9rem 0 .4rem}
+    .carousel-dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--gold);background:transparent;cursor:pointer;transition:.2s ease}
+    .carousel-dot.active{background:var(--gold);transform:scale(1.25)}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(7,17,31,.6);backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--silver);font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:.2s ease}
+    .carousel-btn:hover{background:var(--gold);color:#09111f;border-color:var(--gold)}
+    .carousel-prev{left:14px}.carousel-next{right:14px}
+
+    /* ── QR SPOTLIGHT ── */
+    .qr-spotlight{display:flex;align-items:center;gap:2rem;flex-wrap:wrap;padding:1.5rem;border-radius:28px;border:1px solid rgba(224,178,75,.22);background:linear-gradient(135deg,rgba(224,178,75,.07),rgba(255,255,255,.02));margin-top:1.5rem}
+    .qr-spotlight img{width:140px;height:140px;border-radius:18px;background:#fff;padding:.4rem;flex-shrink:0}
+    .qr-spotlight-text h3{font-family:var(--font-display);font-size:var(--text-lg);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2)}
+    .qr-spotlight-text p{color:var(--muted);margin-top:.5rem;max-width:42ch}
+    .qr-spotlight-text a{display:inline-flex;align-items:center;gap:.5rem;margin-top:.8rem;padding:.7rem 1.1rem;border-radius:999px;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#09111f;font-weight:800;font-size:var(--text-sm)}
+
+    @media (max-width: 980px){.hero-grid,.home-quick,.section-head,.contact-grid{grid-template-columns:1fr}.point-grid{grid-template-columns:1fr 1fr}.nav-tabs{display:none}.headline{max-width:none}.lb-prev{left:6px}.lb-next{right:6px}} 
+    @media (max-width: 640px){.container{width:min(100% - 1.2rem,1180px)}.point-grid{grid-template-columns:1fr}.hero-actions .cta,.hero-actions .ghost{width:100%}.qr-inline{align-items:flex-start}.comp-grid{grid-template-columns:1fr 1fr}.lb-prev{left:2px}.lb-next{right:2px}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <canvas id="particle-canvas"></canvas>
+  <div class="bg-grid"></div>
+  <div class="sky"><div class="sky-glow"></div><div class="cloud cloud--1"></div><div class="cloud cloud--2"></div><div class="cloud cloud--3"></div>
+    <div class="plane plane--1"><svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><path d="M60 31.5 35.8 24 23 6.7c-1.2-1.6-3.6-1.7-4.9-.1L16 9.1l8 15.5-11.8-3.7-4.4-6c-.7-.9-2-.9-2.7 0l-2.1 2.7c-.7.9-.6 2.2.3 2.9l5.2 4.2v7l-5.2 4.2c-.9.7-1 2-.3 2.9l2.1 2.7c.7.9 2 .9 2.7 0l4.4-6L24 39.4 16 54.9l2 2.5c1.3 1.6 3.7 1.5 4.9-.1L35.8 40 60 32.5c1.3-.4 2.2-1.6 2.2-3s-.9-2.6-2-3z"/></svg></div>
+    <div class="plane plane--2"><svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><path d="M60 31.5 35.8 24 23 6.7c-1.2-1.6-3.6-1.7-4.9-.1L16 9.1l8 15.5-11.8-3.7-4.4-6c-.7-.9-2-.9-2.7 0l-2.1 2.7c-.7.9-.6 2.2.3 2.9l5.2 4.2v7l-5.2 4.2c-.9.7-1 2-.3 2.9l2.1 2.7c.7.9 2 .9 2.7 0l4.4-6L24 39.4 16 54.9l2 2.5c1.3 1.6 3.7 1.5 4.9-.1L35.8 40 60 32.5c1.3-.4 2.2-1.6 2.2-3s-.9-2.6-2-3z"/></svg></div>
+  </div>
+  <div class="site-shell">
+    <header><div class="container nav">
+      <a href="#home" class="brand" data-route="home" aria-label="TRAC YCDSB home">
+        <div class="brand-logo"><img src="/public/images/trac-logo.jpg" alt="TRAC logo" width="1080" height="1080" loading="eager" /></div>
+        <div class="brand-copy"><strong>TRAC YCDSB</strong><span>Education First. Opportunity Restored.</span></div>
+      </a>
+      <nav class="nav-tabs" aria-label="Website sections">
+        <a class="tab-link" href="#home" data-route="home">Home</a>
+        <a class="tab-link" href="#why" data-route="why">Why Sign</a>
+        <a class="tab-link" href="#competitions" data-route="competitions">Competitions</a>
+        <a class="tab-link" href="#contact" data-route="contact">Contact Us</a>
+        <a class="tab-link" href="#action" data-route="action">Your Action</a>
+      </nav>
+      <a class="cta" href="#action" data-route="action">Take Action</a>
+    </div></header>
+    <main id="main">
+
+      <!-- HOME PAGE -->
+      <section class="page" data-page="home">
+        <section class="hero"><div class="container">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>YCDSB Student Advocacy For 2026–2027</div>
+          <div class="hero-grid">
+            <div>
+              <p class="script">Education Should Never Be Political</p>
+              <h1 class="headline">Bring Back Academic U.S. Trips</h1>
+              <p class="hero-sub">TRAC YCDSB is advocating for the return of academic school-affiliated U.S. trips because this issue is about education, not just travel. Students put serious effort into DECA, drama, HOSA, music, civics, and leadership opportunities, and they should not lose the educational experiences tied to those programs.</p>
+              <div class="hero-actions">
+                <a class="cta" href="#action" data-route="action">Take Action Now</a>
+                <a class="ghost" href="#why" data-route="why">Why Sign</a>
+              </div>
+              <div class="home-quick reveal">
+                <div class="quick-card">
+                  <h3>Your Action Starts Here</h3>
+                  <p>Open the petition directly or scan the QR code and share it with students, parents, teachers, and alumni.</p>
+                  <div class="quick-links"><a class="link-pill" href="https://www.change.org/trac-ycdsb" target="_blank" rel="noopener noreferrer">change.org/trac-ycdsb</a></div>
+                  <div class="qr-inline">
+                    <img src="/public/images/petition-qrcode.jpg" alt="QR code linking to the TRAC YCDSB Change.org petition." width="512" height="512" loading="lazy" />
+                    <p style="max-width:24ch;color:var(--muted);">Scan with your phone camera to open the petition instantly.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-card reveal" id="hero-tilt-card">
+              <img src="/public/images/comp-deca-provincial.jpg" alt="Students on stage holding a DECA provincial plaque during an awards moment." width="1080" height="1440" loading="eager" />
+              <div class="hero-card-badge"><strong>Education In Action</strong><span>Students work all year for these moments.</span></div>
+            </div>
+          </div>
+          <div class="ticker-wrap"><div class="ticker" aria-hidden="true">
+            <span>Only Major Ontario Board To Ban U.S. Trips</span><span>Students Worked For These Opportunities</span><span>YCDSB Hosted U.S. Trips Before</span><span>DECA</span><span>Drama</span><span>HOSA</span><span>Music</span><span>Civics</span>
+            <span>Only Major Ontario Board To Ban U.S. Trips</span><span>Students Worked For These Opportunities</span><span>YCDSB Hosted U.S. Trips Before</span><span>DECA</span><span>Drama</span><span>HOSA</span><span>Music</span><span>Civics</span>
+          </div></div>
+        </div></section>
+      </section>
+
+      <!-- WHY SIGN PAGE -->
+      <section class="page" data-page="why">
+        <section class="section"><div class="container">
+          <div class="section-head reveal">
+            <div><p class="kicker">Why Sign</p><h2 class="title">Three Clear Reasons To Support Us</h2></div>
+            <p class="lede">This campaign is about educational fairness, student effort, and restoring access to academic opportunities that existed before.</p>
+          </div>
+          <div class="point-grid">
+            <article class="point reveal"><h3>Only Board</h3><p>TRAC YCDSB argues that YCDSB is the only major Ontario board taking a full academic U.S. trip ban approach, leaving its students behind their peers.</p></article>
+            <article class="point reveal"><h3>Lost Effort</h3><p>Students invest months into projects, rehearsals, presentations, and competition prep, only to lose the educational experience they worked toward.</p></article>
+            <article class="point reveal"><h3>Trips Happened Before</h3><p>YCDSB has hosted U.S. trips in the past, so this is a loss of academic opportunity that students previously had access to.</p></article>
+          </div>
+
+          <!-- CAROUSEL on why page -->
+          <div class="carousel-wrap reveal" style="margin-top:2rem;">
+            <div class="carousel-track" id="why-carousel">
+              <div class="carousel-slide">
+                <img src="/public/images/comp-deca-icdc-2024.jpg" alt="DECA ICDC 2024 first place winners on stage." />
+                <div class="carousel-slide-caption"><strong>DECA ICDC 2024 — First Place</strong><span>Anaheim, California · These are the moments U.S. trips make possible.</span></div>
+              </div>
+              <div class="carousel-slide">
+                <img src="/public/images/comp-deca-icdc-third.jpg" alt="DECA ICDC 2024 third place team holding trophy." />
+                <div class="carousel-slide-caption"><strong>DECA ICDC 2024 — Third Place</strong><span>Students representing YCDSB on the international stage.</span></div>
+              </div>
+              <div class="carousel-slide">
+                <img src="/public/images/comp-deca-icdc-2025.jpg" alt="DECA ICDC 2025 second place winners in Orlando." />
+                <div class="carousel-slide-caption"><strong>DECA ICDC 2025 — Second Place</strong><span>Orlando, Florida · Academic excellence recognized globally.</span></div>
+              </div>
+              <div class="carousel-slide">
+                <img src="/public/images/comp-hosa-pct.jpg" alt="HOSA 2025 Patient Care Technician winners on podium." />
+                <div class="carousel-slide-caption"><strong>HOSA 2025 — Patient Care Technician</strong><span>National competition podium — hard work deserves this stage.</span></div>
+              </div>
+              <div class="carousel-slide">
+                <img src="/public/images/comp-hosa-ilc.jpg" alt="HOSA 2025 International Leadership Conference team on stage." />
+                <div class="carousel-slide-caption"><strong>HOSA 2025 — International Leadership Conference</strong><span>A team that earned their place on the world stage.</span></div>
+              </div>
+              <div class="carousel-slide">
+                <img src="/public/images/comp-hosa-speech.jpg" alt="Student delivering a speech on stage at a HOSA conference." />
+                <div class="carousel-slide-caption"><strong>HOSA — Public Speaking</strong><span>Months of preparation for a few powerful minutes on stage.</span></div>
+              </div>
+            </div>
+            <button class="carousel-btn carousel-prev" id="why-prev" aria-label="Previous">&#8592;</button>
+            <button class="carousel-btn carousel-next" id="why-next" aria-label="Next">&#8594;</button>
+            <div class="carousel-dots" id="why-dots"></div>
+          </div>
+
+          <div class="panel reveal" style="margin-top:1.5rem;"><p>This issue is not casual travel. It is about access to serious educational experiences that reward preparation, ambition, and school representation.</p></div>
+        </div></section>
+      </section>
+
+      <!-- COMPETITIONS PAGE -->
+      <section class="page" data-page="competitions">
+        <section class="comp-section"><div class="container">
+          <div class="section-head reveal">
+            <div><p class="kicker">Competition Highlights</p><h2 class="title">What's At Stake</h2></div>
+            <p class="lede">These are the real results of real students who trained, competed, and earned — and who deserve to keep doing so.</p>
+          </div>
+          <div class="comp-filter reveal">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="deca">DECA</button>
+            <button class="filter-btn" data-filter="hosa">HOSA</button>
+          </div>
+          <div class="comp-grid" id="comp-grid">
+            <div class="comp-card reveal" data-org="deca" data-title="DECA ICDC 2024 — 1st Place" data-caption="First place at DECA's International Career Development Conference 2024, Anaheim, California." data-img="/public/images/comp-deca-icdc-2024.jpg">
+              <img src="/public/images/comp-deca-icdc-2024.jpg" alt="DECA ICDC 2024 first place winners" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-deca">DECA</span>
+                <div class="comp-card-title">ICDC 2024 — 1st Place</div>
+                <div class="comp-card-place">🥇 First Place</div>
+                <div class="comp-card-year">Anaheim, CA</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="deca" data-title="DECA ICDC 2024 — 3rd Place" data-caption="Third place team at DECA ICDC 2024, celebrating their achievement together." data-img="/public/images/comp-deca-icdc-third.jpg">
+              <img src="/public/images/comp-deca-icdc-third.jpg" alt="DECA ICDC 2024 third place team" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-deca">DECA</span>
+                <div class="comp-card-title">ICDC 2024 — 3rd Place</div>
+                <div class="comp-card-place">🥉 Third Place</div>
+                <div class="comp-card-year">Anaheim, CA</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="deca" data-title="DECA ICDC 2025 — 2nd Place" data-caption="Second place at DECA ICDC 2025 in Orlando, Florida — showcasing academic excellence internationally." data-img="/public/images/comp-deca-icdc-2025.jpg">
+              <img src="/public/images/comp-deca-icdc-2025.jpg" alt="DECA ICDC 2025 second place" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-deca">DECA</span>
+                <div class="comp-card-title">ICDC 2025 — 2nd Place</div>
+                <div class="comp-card-place">🥈 Second Place</div>
+                <div class="comp-card-year">Orlando, FL</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="deca" data-title="DECA Provincial Award" data-caption="DECA provincial award recipients celebrating on stage." data-img="/public/images/comp-deca-provincial.jpg">
+              <img src="/public/images/comp-deca-provincial.jpg" alt="DECA Provincial winners" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-deca">DECA</span>
+                <div class="comp-card-title">DECA Provincial</div>
+                <div class="comp-card-place">🏆 Provincial Award</div>
+                <div class="comp-card-year">Ontario</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="hosa" data-title="HOSA 2025 — Patient Care Technician" data-caption="HOSA 2025 National Leadership Conference Patient Care Technician podium winners." data-img="/public/images/comp-hosa-pct.jpg">
+              <img src="/public/images/comp-hosa-pct.jpg" alt="HOSA 2025 PCT winners" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-hosa">HOSA</span>
+                <div class="comp-card-title">PCT — National Podium</div>
+                <div class="comp-card-place">🏅 National Medalists</div>
+                <div class="comp-card-year">2025 NLC</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="hosa" data-title="HOSA 2025 — ILC Team" data-caption="HOSA 2025 International Leadership Conference team on stage." data-img="/public/images/comp-hosa-ilc.jpg">
+              <img src="/public/images/comp-hosa-ilc.jpg" alt="HOSA 2025 ILC team" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-hosa">HOSA</span>
+                <div class="comp-card-title">ILC 2025 — Team</div>
+                <div class="comp-card-place">✨ International Conference</div>
+                <div class="comp-card-year">2025 ILC</div>
+              </div>
+            </div>
+            <div class="comp-card reveal" data-org="hosa" data-title="HOSA — Speech on Stage" data-caption="A HOSA student delivering their speech on stage at a national conference." data-img="/public/images/comp-hosa-speech.jpg">
+              <img src="/public/images/comp-hosa-speech.jpg" alt="HOSA student speech on stage" loading="lazy" />
+              <div class="comp-card-info">
+                <span class="comp-card-org org-hosa">HOSA</span>
+                <div class="comp-card-title">Public Speaking</div>
+                <div class="comp-card-place">📢 National Stage</div>
+                <div class="comp-card-year">HOSA Conference</div>
+              </div>
+            </div>
+          </div>
+        </div></section>
+      </section>
+
+      <!-- CONTACT PAGE -->
+      <section class="page" data-page="contact">
+        <section class="section"><div class="container">
+          <div class="section-head reveal"><div><p class="kicker">Contact Us</p><h2 class="title">Help Us Grow The Movement</h2></div><p class="lede">Reach out with questions, stories, support, or ideas for how to spread the campaign further across YCDSB communities.</p></div>
+          <div class="contact-grid">
+            <a class="reveal" href="mailto:outreach@trac-ycdsb.ca"><small>Email</small>outreach@trac-ycdsb.ca</a>
+            <div class="panel reveal"><small style="display:block;color:var(--silver-2);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem;">Instagram</small><iframe class="embed-frame" title="TRAC YCDSB Instagram" src="https://www.instagram.com/travel_access_ycdsb/embed" loading="lazy"></iframe><p class="instagram-note">If the embedded profile does not load in your browser, open Instagram directly: <a href="https://www.instagram.com/travel_access_ycdsb" target="_blank" rel="noopener noreferrer" style="color:var(--gold);">@travel_access_ycdsb</a></p></div>
+          </div>
+        </div></section>
+      </section>
+
+      <!-- ACTION PAGE -->
+      <section class="page" data-page="action">
+        <section class="section"><div class="container">
+          <div class="section-head reveal"><div><p class="kicker">Your Action</p><h2 class="title">Sign, Share, And Support Education</h2></div><p class="lede">Use the QR code, open the petition directly, and view the embedded Change.org page here on the site.</p></div>
+
+          <!-- QR Spotlight -->
+          <div class="qr-spotlight reveal">
+            <img src="/public/images/petition-qrcode.jpg" alt="QR code for TRAC YCDSB Change.org petition" />
+            <div class="qr-spotlight-text">
+              <h3>Scan To Sign The Petition</h3>
+              <p>Point your phone camera at the QR code to open the Change.org petition instantly. Share it with your school community, parents, and teachers.</p>
+              <a href="https://www.change.org/trac-ycdsb" target="_blank" rel="noopener noreferrer">Open Petition &#8594;</a>
+            </div>
+          </div>
+
+          <div class="contact-grid" style="margin-top:1.5rem;">
+            <div class="panel reveal"><small style="display:block;color:var(--silver-2);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem;">Petition Link</small><a class="link-pill" href="https://www.change.org/trac-ycdsb" target="_blank" rel="noopener noreferrer">change.org/trac-ycdsb</a></div>
+            <div class="panel reveal"><small style="display:block;color:var(--silver-2);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem;">Embedded Petition</small><iframe class="embed-frame" title="TRAC YCDSB Change.org Petition" src="https://www.change.org/trac-ycdsb" loading="lazy"></iframe></div>
+          </div>
+        </div></section>
+      </section>
+
+    </main>
+    <footer class="footer"><div class="container">TRAC YCDSB · Education First. Opportunity Restored.</div></footer>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo lightbox">
+    <div class="lb-inner">
+      <button class="lb-close" id="lb-close" aria-label="Close lightbox">&#10005;</button>
+      <div class="lb-img-wrap">
+        <img id="lb-img" src="" alt="" />
+        <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&#8592;</button>
+        <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&#8594;</button>
+        <span class="lb-counter" id="lb-counter"></span>
+      </div>
+      <div class="lb-caption"><strong id="lb-title"></strong><span id="lb-cap-text"></span></div>
+      <div class="lb-thumb-strip" id="lb-thumbs"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ── ROUTING ── */
+    const pages=[...document.querySelectorAll('.page')], routeLinks=[...document.querySelectorAll('[data-route]')];
+    function showPage(pageName){const target=pageName||'home';pages.forEach(p=>p.classList.toggle('active',p.dataset.page===target));routeLinks.forEach(link=>link.classList.toggle('active',link.dataset.route===target));window.scrollTo({top:0,behavior:'instant'});reobserve();}
+    function routeFromHash(){const hash=location.hash.replace('#','');const allowed=['home','why','competitions','contact','action'];showPage(allowed.includes(hash)?hash:'home');}
+    window.addEventListener('hashchange',routeFromHash);routeFromHash();
+
+    /* ── REVEAL OBSERVER ── */
+    let observer;
+    function reobserve(){observer&&observer.disconnect();observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('is-visible');});},{threshold:.1});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));}
+    reobserve();
+
+    /* ── HERO TILT ── */
+    const heroCard=document.getElementById('hero-tilt-card');
+    if(heroCard&&matchMedia('(pointer:fine)').matches){heroCard.addEventListener('mousemove',e=>{const r=heroCard.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;heroCard.style.transform=`perspective(1200px) rotateY(${x*10}deg) rotateX(${y*-10}deg) translateY(-4px)`;});heroCard.addEventListener('mouseleave',()=>heroCard.style.transform='');}
+
+    /* ── LIGHTBOX ── */
+    const lb=document.getElementById('lightbox');
+    const lbImg=document.getElementById('lb-img');
+    const lbTitle=document.getElementById('lb-title');
+    const lbCap=document.getElementById('lb-cap-text');
+    const lbCounter=document.getElementById('lb-counter');
+    const lbThumbs=document.getElementById('lb-thumbs');
+    let lbData=[],lbIndex=0;
+
+    function buildLbData(){
+      lbData=[...document.querySelectorAll('.comp-card:not(.hidden)')].map(c=>({img:c.dataset.img,title:c.dataset.title,caption:c.dataset.caption}));
+    }
+    function openLb(idx){
+      buildLbData();
+      if(!lbData.length)return;
+      lbIndex=idx;
+      renderLb();
+      lb.classList.add('open');
+      document.body.style.overflow='hidden';
+    }
+    function renderLb(){
+      const d=lbData[lbIndex];
+      lbImg.src=d.img; lbImg.alt=d.title;
+      lbTitle.textContent=d.title;
+      lbCap.textContent=d.caption;
+      lbCounter.textContent=(lbIndex+1)+' / '+lbData.length;
+      lbThumbs.innerHTML='';
+      lbData.forEach((t,i)=>{const th=document.createElement('img');th.src=t.img;th.alt=t.title;th.className='lb-thumb'+(i===lbIndex?' active':'');th.addEventListener('click',()=>{lbIndex=i;renderLb();});lbThumbs.appendChild(th);});
+      const activeThumb=lbThumbs.querySelectorAll('.lb-thumb')[lbIndex];
+      if(activeThumb)activeThumb.scrollIntoView({inline:'center',behavior:'smooth'});
+    }
+    function closeLb(){lb.classList.remove('open');document.body.style.overflow='';}
+    document.getElementById('lb-close').addEventListener('click',closeLb);
+    lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+    document.getElementById('lb-prev').addEventListener('click',()=>{lbIndex=(lbIndex-1+lbData.length)%lbData.length;renderLb();});
+    document.getElementById('lb-next').addEventListener('click',()=>{lbIndex=(lbIndex+1)%lbData.length;renderLb();});
+    document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='ArrowLeft'){lbIndex=(lbIndex-1+lbData.length)%lbData.length;renderLb();}if(e.key==='ArrowRight'){lbIndex=(lbIndex+1)%lbData.length;renderLb();}if(e.key==='Escape')closeLb();});
+    document.querySelectorAll('.comp-card').forEach((card,idx)=>{card.addEventListener('click',()=>{buildLbData();const visibleCards=[...document.querySelectorAll('.comp-card:not(.hidden)')];const vi=visibleCards.indexOf(card);openLb(vi>=0?vi:0);});});
+
+    /* ── FILTER BUTTONS ── */
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const f=btn.dataset.filter;
+        document.querySelectorAll('.comp-card').forEach(c=>{
+          if(f==='all'||c.dataset.org===f){c.classList.remove('hidden');}
+          else{c.classList.add('hidden');}
+        });
+      });
+    });
+
+    /* ── CAROUSEL (WHY PAGE) ── */
+    function initCarousel(trackId,prevId,nextId,dotsId){
+      const track=document.getElementById(trackId);
+      if(!track)return;
+      const slides=[...track.children];
+      const dotsContainer=document.getElementById(dotsId);
+      let current=0;
+      slides.forEach((_,i)=>{const d=document.createElement('button');d.className='carousel-dot'+(i===0?' active':'');d.setAttribute('aria-label','Slide '+(i+1));d.addEventListener('click',()=>goTo(i));dotsContainer.appendChild(d);});
+      function goTo(n){current=(n+slides.length)%slides.length;track.style.transform=`translateX(-${current*100}%)`;dotsContainer.querySelectorAll('.carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===current));}
+      document.getElementById(prevId).addEventListener('click',()=>goTo(current-1));
+      document.getElementById(nextId).addEventListener('click',()=>goTo(current+1));
+      setInterval(()=>goTo(current+1),5000);
+    }
+    initCarousel('why-carousel','why-prev','why-next','why-dots');
+
+    /* ── PARTICLES ── */
+    const canvas=document.getElementById('particle-canvas');const ctx=canvas.getContext('2d');let w=0,h=0,particles=[];const mouse={x:window.innerWidth/2,y:window.innerHeight/2};function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}window.addEventListener('resize',resize);resize();
+    function spawnBurst(x,y){for(let i=0;i<12;i++)particles.push({x,y,vx:(Math.random()-.5)*1.7,vy:(Math.random()-.5)*1.7,life:50+Math.random()*20,size:1+Math.random()*2.5,hue:i%3===0?'224,178,75':'216,224,235'});}
+    window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;if(Math.random()<.65)spawnBurst(mouse.x,mouse.y);});
+    window.addEventListener('touchmove',e=>{const t=e.touches[0];if(!t)return;spawnBurst(t.clientX,t.clientY);},{passive:true});
+    function animate(){ctx.clearRect(0,0,w,h);particles.forEach((p,idx)=>{p.x+=p.vx;p.y+=p.vy;p.life-=1;p.vx*=.99;p.vy*=.99;const a=Math.max(p.life/70,0);ctx.beginPath();ctx.fillStyle=`rgba(${p.hue},${a})`;ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.strokeStyle=`rgba(${p.hue},${a*.3})`;ctx.arc(p.x,p.y,p.size*5,0,Math.PI*2);ctx.stroke();if(p.life<=0)particles.splice(idx,1);});const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,140);g.addColorStop(0,'rgba(224,178,75,.08)');g.addColorStop(1,'rgba(224,178,75,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(mouse.x,mouse.y,140,0,Math.PI*2);ctx.fill();requestAnimationFrame(animate);}
+    animate();
+  </script>
+</body>
+</html>
